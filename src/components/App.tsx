@@ -520,6 +520,10 @@ class App extends React.Component<AppProps, AppState> {
               }
               langCode={getLanguage().code}
               isCollaborating={this.props.isCollaborating}
+              hideIOActions={this.props.hideIOActions}
+              hideLibraries={this.props.hideLibraries}
+              hideLockButton={this.props.hideLockButton}
+              hideUserList={this.props.hideUserList}
               renderTopRightUI={renderTopRightUI}
               renderCustomFooter={renderFooter}
               renderCustomStats={renderCustomStats}
@@ -1810,7 +1814,7 @@ class App extends React.Component<AppProps, AppState> {
         this.setState({ isBindingEnabled: false });
       }
 
-      if (event.code === CODES.ZERO) {
+      if (event.code === CODES.ZERO && !this.props.hideLibraries) {
         const nextState = !this.state.isLibraryOpen;
         this.setState({ isLibraryOpen: nextState });
         // track only openings

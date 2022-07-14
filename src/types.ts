@@ -30,6 +30,8 @@ import Library from "./data/library";
 import type { FileSystemHandle } from "./data/filesystem";
 import type { ALLOWED_IMAGE_MIME_TYPES, MIME_TYPES } from "./constants";
 
+export * from "./element/types";
+
 export type Point = Readonly<RoughPoint>;
 
 export type Collaborator = {
@@ -300,6 +302,10 @@ export interface ExcalidrawProps {
   handleKeyboardGlobally?: boolean;
   onLibraryChange?: (libraryItems: LibraryItems) => void | Promise<any>;
   autoFocus?: boolean;
+  hideIOActions?: boolean;
+  hideLibraries?: boolean;
+  hideLockButton?: boolean;
+  hideUserList?: boolean;
   generateIdForFile?: (file: File) => string | Promise<string>;
   onLinkOpen?: (
     element: NonDeletedExcalidrawElement,
@@ -312,6 +318,24 @@ export interface ExcalidrawProps {
     pointerDownState: PointerDownState,
   ) => void;
   onScrollChange?: (scrollX: number, scrollY: number) => void;
+}
+
+export interface CollabProps {
+  collabServerUrl?: string;
+  collabLink?: { roomId: string; roomKey: string };
+  excalidrawAPI: ExcalidrawImperativeAPI;
+  getCollabLink?: Function;
+  modalIsShown?: boolean;
+  useTestEnv?: boolean;
+}
+
+export interface ExcalidrawAppProps {
+  collabServerUrl?: string;
+  collabLink?: { roomId: string; roomKey: string };
+  excalidraw: ExcalidrawProps;
+  getCollabAPI?: Function;
+  hideIOActions?: Function;
+  hideLibraries?: Boolean;
 }
 
 export type SceneData = {

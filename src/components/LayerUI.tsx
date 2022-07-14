@@ -56,6 +56,10 @@ interface LayerUIProps {
   showThemeBtn: boolean;
   langCode: Language["code"];
   isCollaborating: boolean;
+  hideIOActions?: boolean;
+  hideLibraries?: boolean;
+  hideLockButton?: boolean;
+  hideUserList?: boolean;
   renderTopRightUI?: ExcalidrawProps["renderTopRightUI"];
   renderCustomFooter?: ExcalidrawProps["renderFooter"];
   renderCustomStats?: ExcalidrawProps["renderCustomStats"];
@@ -80,6 +84,10 @@ const LayerUI = ({
   showExitZenModeBtn,
   showThemeBtn,
   isCollaborating,
+  hideIOActions,
+  hideLibraries,
+  hideLockButton,
+  hideUserList,
   renderTopRightUI,
   renderCustomFooter,
   renderCustomStats,
@@ -194,21 +202,23 @@ const LayerUI = ({
          see https://github.com/excalidraw/excalidraw/pull/1445 */}
       <Island padding={2} style={{ zIndex: 1 }}>
         <Stack.Col gap={4}>
-          <Stack.Row gap={1} justifyContent="space-between">
-            {actionManager.renderAction("clearCanvas")}
-            <Separator />
-            {actionManager.renderAction("loadScene")}
-            {renderJSONExportDialog()}
-            {renderImageExportDialog()}
-            <Separator />
-            {onCollabButtonClick && (
-              <CollabButton
-                isCollaborating={isCollaborating}
-                collaboratorCount={appState.collaborators.size}
-                onClick={onCollabButtonClick}
-              />
-            )}
-          </Stack.Row>
+          {!hideIOActions && (
+            <Stack.Row gap={1} justifyContent="space-between">
+              {actionManager.renderAction("clearCanvas")}
+              <Separator />
+              {actionManager.renderAction("loadScene")}
+              {renderJSONExportDialog()}
+              {renderImageExportDialog()}
+              <Separator />
+              {onCollabButtonClick && (
+                <CollabButton
+                  isCollaborating={isCollaborating}
+                  collaboratorCount={appState.collaborators.size}
+                  onClick={onCollabButtonClick}
+                />
+              )}
+            </Stack.Row>
+          )}
           <BackgroundPickerAndDarkModeToggle
             actionManager={actionManager}
             appState={appState}
@@ -323,12 +333,14 @@ const LayerUI = ({
                       title={t("toolBar.penMode")}
                       penDetected={appState.penDetected}
                     />
-                    <LockButton
-                      zenModeEnabled={appState.zenModeEnabled}
-                      checked={appState.activeTool.locked}
-                      onChange={() => onLockToggle()}
-                      title={t("toolBar.lock")}
-                    />
+                    {!hideLockButton && (
+                      <LockButton
+                        zenModeEnabled={appState.zenModeEnabled}
+                        checked={appState.activeTool.locked}
+                        onChange={() => onLockToggle()}
+                        title={t("toolBar.lock")}
+                      />
+                    )}
                     <Island
                       padding={1}
                       className={clsx("App-toolbar", {
@@ -355,10 +367,12 @@ const LayerUI = ({
                         />
                       </Stack.Row>
                     </Island>
-                    <LibraryButton
-                      appState={appState}
-                      setAppState={setAppState}
-                    />
+                    {!hideLibraries && (
+                      <LibraryButton
+                        appState={appState}
+                        setAppState={setAppState}
+                      />
+                    )}
                   </Stack.Row>
                 </Stack.Col>
               )}
@@ -372,10 +386,12 @@ const LayerUI = ({
               },
             )}
           >
-            <UserList
-              collaborators={appState.collaborators}
-              actionManager={actionManager}
-            />
+            {!hideUserList && (
+              <UserList
+                collaborators={appState.collaborators}
+                actionManager={actionManager}
+              />
+            )}
             {renderTopRightUI?.(device.isMobile, appState)}
           </div>
         </div>
@@ -487,6 +503,7 @@ const LayerUI = ({
       )}
       {appState.showHelpDialog && (
         <HelpDialog
+          hideLibraries={hideLibraries}
           onClose={() => {
             setAppState({ showHelpDialog: false });
           }}

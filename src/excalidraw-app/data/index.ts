@@ -61,12 +61,22 @@ const generateRoomId = async () => {
  * from upstream is to allow changing the params immediately when needed without
  * having to wait for clients to update the SW.
  *
+ * If collabServerUrl is provided, we use that instead (useful for packages)
  * If REACT_APP_WS_SERVER_URL env is set, we use that instead (useful for forks)
  */
-export const getCollabServer = async (): Promise<{
+export const getCollabServer = async (
+  collabServerUrl?: string,
+): Promise<{
   url: string;
   polling: boolean;
 }> => {
+  if (collabServerUrl) {
+    return {
+      url: collabServerUrl,
+      polling: true,
+    };
+  }
+
   if (process.env.REACT_APP_WS_SERVER_URL) {
     return {
       url: process.env.REACT_APP_WS_SERVER_URL,
