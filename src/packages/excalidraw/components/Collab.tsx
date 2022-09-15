@@ -178,6 +178,7 @@ class Collab extends PureComponent<CollabProps, CollabState> {
   }
 
   componentWillUnmount() {
+    this.stopCollaboration(false);
     window.removeEventListener(EVENT.BEFORE_UNLOAD, this.beforeUnload);
     window.removeEventListener(EVENT.UNLOAD, this.onUnload);
     window.removeEventListener(EVENT.POINTER_MOVE, this.onPointerMove);
@@ -319,9 +320,14 @@ class Collab extends PureComponent<CollabProps, CollabState> {
     }
   };
 
-  private fetchImageFilesFromFirebase = async (scene: {
-    elements: readonly ExcalidrawElement[];
-  }) => {
+  private fetchImageFilesFromFirebase = async (
+    scene: {
+      elements: readonly ExcalidrawElement[];
+    } | null,
+  ) => {
+    if (!scene) {
+      return;
+    }
     const unfetchedImages = scene.elements
       .filter((element) => {
         return (
@@ -614,11 +620,15 @@ class Collab extends PureComponent<CollabProps, CollabState> {
   };
 
   private loadImageFiles = throttle(async () => {
-    const { loadedFiles, erroredFiles } =
-      await this.fetchImageFilesFromFirebase({
-        elements: this.excalidrawAPI.getSceneElementsIncludingDeleted(),
-      });
+    const response = await this.fetchImageFilesFromFirebase({
+      elements: this.excalidrawAPI.getSceneElementsIncludingDeleted(),
+    });
 
+    if (!response) {
+      return;
+    }
+
+    const { loadedFiles, erroredFiles } = response;
     this.excalidrawAPI.addFiles(loadedFiles);
 
     updateStaleImageStatuses({

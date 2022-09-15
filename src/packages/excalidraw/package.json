@@ -1,6 +1,6 @@
 {
-  "name": "@excalidraw/excalidraw",
-  "version": "0.0.1",
+  "name": "@jitsi/excalidraw",
+  "version": "0.0.2",
   "main": "main.js",
   "types": "types/packages/excalidraw/index.d.ts",
   "files": [
@@ -10,15 +10,16 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "Excalidraw as a React component",
-  "repository": "https://github.com/excalidraw/excalidraw",
+  "description": "Excalidraw with Collaboration for Jitsi Meet",
+  "repository": "https://github.com/jitsi/excalidraw",
   "license": "MIT",
   "keywords": [
-    "excalidraw",
+    "jitsi",
     "excalidraw-embed",
+    "whiteboard",
     "react",
     "npm",
-    "npm excalidraw"
+    "npm jitsi"
   ],
   "browserslist": {
     "production": [
@@ -70,8 +71,8 @@
     "webpack-dev-server": "4.9.3",
     "webpack-merge": "5.8.0"
   },
-  "bugs": "https://github.com/excalidraw/excalidraw/issues",
-  "homepage": "https://github.com/excalidraw/excalidraw/tree/master/src/packages/excalidraw",
+  "bugs": "https://github.com/jitsi/excalidraw/issues",
+  "homepage": "https://github.com/jitsi/excalidraw/tree/master/src/packages/excalidraw",
   "scripts": {
     "gen:types": "tsc --project ../../../tsconfig-types.json",
     "build:umd": "rm -rf dist && cross-env NODE_ENV=production webpack --config webpack.prod.config.js && cross-env NODE_ENV=development webpack --config webpack.dev.config.js && yarn gen:types",

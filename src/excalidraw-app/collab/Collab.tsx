@@ -249,9 +249,13 @@ class Collab extends PureComponent<Props, CollabState> {
         this.excalidrawAPI.getAppState(),
       );
 
-      if (this.isCollaborating() && savedData && savedData.reconciledElements) {
+      if (!savedData) {
+        return;
+      }
+
+      if (this.isCollaborating() && savedData?.reconciledElements) {
         this.handleRemoteSceneUpdate(
-          this.reconcileElements(savedData.reconciledElements),
+          this.reconcileElements(savedData?.reconciledElements),
         );
       }
     } catch (error: any) {
@@ -616,11 +620,15 @@ class Collab extends PureComponent<Props, CollabState> {
   };
 
   private loadImageFiles = throttle(async () => {
-    const { loadedFiles, erroredFiles } =
-      await this.fetchImageFilesFromFirebase({
-        elements: this.excalidrawAPI.getSceneElementsIncludingDeleted(),
-      });
+    const response = await this.fetchImageFilesFromFirebase({
+      elements: this.excalidrawAPI.getSceneElementsIncludingDeleted(),
+    });
 
+    if (!response) {
+      return;
+    }
+
+    const { loadedFiles, erroredFiles } = response;
     this.excalidrawAPI.addFiles(loadedFiles);
 
     updateStaleImageStatuses({

@@ -22,10 +22,12 @@ let FIREBASE_CONFIG: Record<string, any>;
 try {
   FIREBASE_CONFIG = JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG);
 } catch (error: any) {
-  console.warn(
-    `Error JSON parsing firebase config. Supplied value: ${process.env.REACT_APP_FIREBASE_CONFIG}`,
-  );
-  FIREBASE_CONFIG = {};
+  if (process.env.REACT_APP_FIREBASE_CONFIG) {
+    console.warn(
+      `Error JSON parsing firebase config. Supplied value: ${process.env.REACT_APP_FIREBASE_CONFIG}`,
+    );
+    FIREBASE_CONFIG = {};
+  }
 }
 
 let firebasePromise: Promise<typeof import("firebase/app").default> | null =
@@ -212,6 +214,10 @@ export const saveToFirebase = async (
   elements: readonly SyncableExcalidrawElement[],
   appState: AppState,
 ) => {
+  if (!process.env.REACT_APP_FIREBASE_CONFIG) {
+    return null;
+  }
+
   const { roomId, roomKey, socket } = portal;
   if (
     // bail if no room exists as there's nothing we can do at this point
@@ -303,6 +309,10 @@ export const loadFilesFromFirebase = async (
   decryptionKey: string,
   filesIds: readonly FileId[],
 ) => {
+  if (!process.env.REACT_APP_FIREBASE_CONFIG) {
+    return null;
+  }
+
   const loadedFiles: BinaryFileData[] = [];
   const erroredFiles = new Map<FileId, true>();
 
