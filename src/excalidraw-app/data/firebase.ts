@@ -284,6 +284,9 @@ export const loadFromFirebase = async (
   roomKey: string,
   socket: SocketIOClient.Socket | null,
 ): Promise<readonly ExcalidrawElement[] | null> => {
+  if (!process.env.REACT_APP_FIREBASE_CONFIG) {
+    return null;
+  }
   const firebase = await loadFirestore();
   const db = firebase.firestore();
 

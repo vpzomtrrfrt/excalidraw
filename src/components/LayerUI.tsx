@@ -56,9 +56,12 @@ interface LayerUIProps {
   showThemeBtn: boolean;
   langCode: Language["code"];
   isCollaborating: boolean;
+  hideClearCanvas?: boolean;
+  hideHelpDialog?: boolean;
   hideIOActions?: boolean;
   hideLibraries?: boolean;
   hideLockButton?: boolean;
+  hideThemeControls?: boolean;
   hideUserList?: boolean;
   renderTopRightUI?: ExcalidrawProps["renderTopRightUI"];
   renderCustomFooter?: ExcalidrawProps["renderFooter"];
@@ -84,9 +87,12 @@ const LayerUI = ({
   showExitZenModeBtn,
   showThemeBtn,
   isCollaborating,
+  hideClearCanvas,
+  hideHelpDialog,
   hideIOActions,
   hideLibraries,
   hideLockButton,
+  hideThemeControls,
   hideUserList,
   renderTopRightUI,
   renderCustomFooter,
@@ -202,29 +208,39 @@ const LayerUI = ({
          see https://github.com/excalidraw/excalidraw/pull/1445 */}
       <Island padding={2} style={{ zIndex: 1 }}>
         <Stack.Col gap={4}>
-          {!hideIOActions && (
-            <Stack.Row gap={1} justifyContent="space-between">
-              {actionManager.renderAction("clearCanvas")}
-              <Separator />
-              {actionManager.renderAction("loadScene")}
-              {renderJSONExportDialog()}
-              {renderImageExportDialog()}
-              <Separator />
-              {onCollabButtonClick && (
+          <Stack.Row gap={1} justifyContent="space-between">
+            {!hideClearCanvas && (
+              <>
+                {actionManager.renderAction("clearCanvas")}
+                <Separator />
+              </>
+            )}
+            {!hideIOActions && (
+              <>
+                {actionManager.renderAction("loadScene")}
+                {renderJSONExportDialog()}
+              </>
+            )}
+            {renderImageExportDialog()}
+            {onCollabButtonClick && (
+              <>
+                <Separator />
                 <CollabButton
                   isCollaborating={isCollaborating}
                   collaboratorCount={appState.collaborators.size}
                   onClick={onCollabButtonClick}
                 />
-              )}
-            </Stack.Row>
+              </>
+            )}
+          </Stack.Row>
+          {!hideThemeControls && (
+            <BackgroundPickerAndDarkModeToggle
+              actionManager={actionManager}
+              appState={appState}
+              setAppState={setAppState}
+              showThemeBtn={showThemeBtn}
+            />
           )}
-          <BackgroundPickerAndDarkModeToggle
-            actionManager={actionManager}
-            appState={appState}
-            setAppState={setAppState}
-            showThemeBtn={showThemeBtn}
-          />
           {appState.fileHandle && (
             <>{actionManager.renderAction("saveToActiveFile")}</>
           )}
@@ -470,16 +486,20 @@ const LayerUI = ({
         >
           {renderCustomFooter?.(false, appState)}
         </div>
-        <div
-          className={clsx(
-            "layer-ui__wrapper__footer-right zen-mode-transition",
-            {
-              "transition-right disable-pointerEvents": appState.zenModeEnabled,
-            },
-          )}
-        >
-          {actionManager.renderAction("toggleShortcuts")}
-        </div>
+
+        {!hideHelpDialog && (
+          <div
+            className={clsx(
+              "layer-ui__wrapper__footer-right zen-mode-transition",
+              {
+                "transition-right disable-pointerEvents":
+                  appState.zenModeEnabled,
+              },
+            )}
+          >
+            {actionManager.renderAction("toggleShortcuts")}
+          </div>
+        )}
         <button
           className={clsx("disable-zen-mode", {
             "disable-zen-mode--visible": showExitZenModeBtn,
@@ -501,7 +521,7 @@ const LayerUI = ({
           onClose={() => setAppState({ errorMessage: null })}
         />
       )}
-      {appState.showHelpDialog && (
+      {appState.showHelpDialog && !hideHelpDialog && (
         <HelpDialog
           hideLibraries={hideLibraries}
           onClose={() => {

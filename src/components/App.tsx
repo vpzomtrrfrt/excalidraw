@@ -520,9 +520,12 @@ class App extends React.Component<AppProps, AppState> {
               }
               langCode={getLanguage().code}
               isCollaborating={this.props.isCollaborating}
+              hideClearCanvas={this.props.hideClearCanvas}
+              hideHelpDialog={this.props.hideHelpDialog}
               hideIOActions={this.props.hideIOActions}
               hideLibraries={this.props.hideLibraries}
               hideLockButton={this.props.hideLockButton}
+              hideThemeControls={this.props.hideThemeControls}
               hideUserList={this.props.hideUserList}
               renderTopRightUI={renderTopRightUI}
               renderCustomFooter={renderFooter}
