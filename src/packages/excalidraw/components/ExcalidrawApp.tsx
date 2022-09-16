@@ -529,7 +529,7 @@ const ExcalidrawWrapper = (props: ExcalidrawAppProps) => {
         ref={excalidrawRefCallback}
         onChange={onChange}
         initialData={initialStatePromiseRef.current.promise}
-        {...(!props.collabLink && {
+        {...(!props.collabDetails && {
           onCollabButtonClick: () => setCollabDialogShown(true),
         })}
         isCollaborating={isCollaborating}
@@ -545,7 +545,7 @@ const ExcalidrawWrapper = (props: ExcalidrawAppProps) => {
       {excalidrawAPI && (
         <Collab
           collabServerUrl={props.collabServerUrl}
-          collabLink={props.collabLink}
+          collabDetails={props.collabDetails}
           excalidrawAPI={excalidrawAPI}
         />
       )}

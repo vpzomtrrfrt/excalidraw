@@ -325,16 +325,15 @@ export interface ExcalidrawProps {
 
 export interface CollabProps {
   collabServerUrl?: string;
-  collabLink?: { roomId: string; roomKey: string };
+  collabDetails?: { roomId: string; roomKey: string };
   excalidrawAPI: ExcalidrawImperativeAPI;
-  getCollabLink?: Function;
   modalIsShown?: boolean;
   useTestEnv?: boolean;
 }
 
 export interface ExcalidrawAppProps {
   collabServerUrl?: string;
-  collabLink?: { roomId: string; roomKey: string };
+  collabDetails?: { roomId: string; roomKey: string };
   excalidraw: ExcalidrawProps;
   getCollabAPI?: Function;
 }
