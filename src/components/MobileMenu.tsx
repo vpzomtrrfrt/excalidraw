@@ -32,6 +32,12 @@ type MobileMenuProps = {
   onPenModeToggle: () => void;
   canvas: HTMLCanvasElement | null;
   isCollaborating: boolean;
+  hideClearCanvas?: boolean;
+  hideIOActions?: boolean;
+  hideLibraries?: boolean;
+  hideLockButton?: boolean;
+  hideThemeControls?: boolean;
+  hideUserList?: boolean;
   renderCustomFooter?: (
     isMobile: boolean,
     appState: AppState,
@@ -58,6 +64,12 @@ export const MobileMenu = ({
   onPenModeToggle,
   canvas,
   isCollaborating,
+  hideClearCanvas,
+  hideIOActions,
+  hideLibraries,
+  hideLockButton,
+  hideThemeControls,
+  hideUserList,
   renderCustomFooter,
   showThemeBtn,
   onImageAction,
@@ -88,17 +100,21 @@ export const MobileMenu = ({
                   </Stack.Row>
                 </Island>
                 {renderTopRightUI && renderTopRightUI(true, appState)}
-                <LockButton
-                  checked={appState.activeTool.locked}
-                  onChange={onLockToggle}
-                  title={t("toolBar.lock")}
-                  isMobile
-                />
-                <LibraryButton
-                  appState={appState}
-                  setAppState={setAppState}
-                  isMobile
-                />
+                {!hideLockButton && (
+                  <LockButton
+                    checked={appState.activeTool.locked}
+                    onChange={onLockToggle}
+                    title={t("toolBar.lock")}
+                    isMobile
+                  />
+                )}
+                {!hideLibraries && (
+                  <LibraryButton
+                    appState={appState}
+                    setAppState={setAppState}
+                    isMobile
+                  />
+                )}
                 <PenModeButton
                   checked={appState.penMode}
                   onChange={onPenModeToggle}
@@ -152,16 +168,20 @@ export const MobileMenu = ({
     if (appState.viewModeEnabled) {
       return (
         <>
-          {renderJSONExportDialog()}
+          {!hideIOActions && renderJSONExportDialog()}
           {renderImageExportDialog()}
         </>
       );
     }
     return (
       <>
-        {actionManager.renderAction("clearCanvas")}
-        {actionManager.renderAction("loadScene")}
-        {renderJSONExportDialog()}
+        {!hideClearCanvas && actionManager.renderAction("clearCanvas")}
+        {!hideIOActions && (
+          <>
+            {actionManager.renderAction("loadScene")}
+            {renderJSONExportDialog()}
+          </>
+        )}
         {renderImageExportDialog()}
         {onCollabButtonClick && (
           <CollabButton
@@ -170,14 +190,14 @@ export const MobileMenu = ({
             onClick={onCollabButtonClick}
           />
         )}
-        {
+        {!hideThemeControls && (
           <BackgroundPickerAndDarkModeToggle
             actionManager={actionManager}
             appState={appState}
             setAppState={setAppState}
             showThemeBtn={showThemeBtn}
           />
-        }
+        )}
       </>
     );
   };
@@ -200,7 +220,7 @@ export const MobileMenu = ({
                 <Stack.Col gap={4}>
                   {renderCanvasActions()}
                   {renderCustomFooter?.(true, appState)}
-                  {appState.collaborators.size > 0 && (
+                  {!hideUserList && appState.collaborators.size > 0 && (
                     <fieldset>
                       <legend>{t("labels.collaborators")}</legend>
                       <UserList
