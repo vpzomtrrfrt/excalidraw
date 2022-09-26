@@ -56,13 +56,6 @@ interface LayerUIProps {
   showThemeBtn: boolean;
   langCode: Language["code"];
   isCollaborating: boolean;
-  hideClearCanvas?: boolean;
-  hideHelpDialog?: boolean;
-  hideIOActions?: boolean;
-  hideLibraries?: boolean;
-  hideLockButton?: boolean;
-  hideThemeControls?: boolean;
-  hideUserList?: boolean;
   renderTopRightUI?: ExcalidrawProps["renderTopRightUI"];
   renderCustomFooter?: ExcalidrawProps["renderFooter"];
   renderCustomStats?: ExcalidrawProps["renderCustomStats"];
@@ -87,13 +80,6 @@ const LayerUI = ({
   showExitZenModeBtn,
   showThemeBtn,
   isCollaborating,
-  hideClearCanvas,
-  hideHelpDialog,
-  hideIOActions,
-  hideLibraries,
-  hideLockButton,
-  hideThemeControls,
-  hideUserList,
   renderTopRightUI,
   renderCustomFooter,
   renderCustomStats,
@@ -163,6 +149,7 @@ const LayerUI = ({
         elements={elements}
         appState={appState}
         files={files}
+        options={UIOptions.canvasActions.saveAsImageOptions}
         actionManager={actionManager}
         onExportToPng={createExporter("png")}
         onExportToSvg={createExporter("svg")}
@@ -209,13 +196,13 @@ const LayerUI = ({
       <Island padding={2} style={{ zIndex: 1 }}>
         <Stack.Col gap={4}>
           <Stack.Row gap={1} justifyContent="space-between">
-            {!hideClearCanvas && (
+            {!UIOptions.canvasActions.hideClearCanvas && (
               <>
                 {actionManager.renderAction("clearCanvas")}
                 <Separator />
               </>
             )}
-            {!hideIOActions && (
+            {!UIOptions.canvasActions.hideIOActions && (
               <>
                 {actionManager.renderAction("loadScene")}
                 {renderJSONExportDialog()}
@@ -233,12 +220,13 @@ const LayerUI = ({
               </>
             )}
           </Stack.Row>
-          {!hideThemeControls && (
+          {!UIOptions.canvasActions.hideThemeControls && (
             <BackgroundPickerAndDarkModeToggle
               actionManager={actionManager}
               appState={appState}
               setAppState={setAppState}
               showThemeBtn={showThemeBtn}
+              disableShortcuts={UIOptions.canvasActions.disableShortcuts}
             />
           )}
           {appState.fileHandle && (
@@ -271,6 +259,13 @@ const LayerUI = ({
           elements={elements}
           renderAction={actionManager.renderAction}
           activeTool={appState.activeTool.type}
+          disableAlignItems={UIOptions.canvasActions.disableAlignItems}
+          disableGrouping={UIOptions.canvasActions.disableGrouping}
+          disableLink={UIOptions.canvasActions.disableLink}
+          disableShortcuts={UIOptions.canvasActions.disableShortcuts}
+          hideColorInput={UIOptions.canvasActions.hideColorInput}
+          hideLayers={UIOptions.canvasActions.hideLayers}
+          hideOpacityInput={UIOptions.canvasActions.hideOpacityInput}
         />
       </Island>
     </Section>
@@ -349,7 +344,7 @@ const LayerUI = ({
                       title={t("toolBar.penMode")}
                       penDetected={appState.penDetected}
                     />
-                    {!hideLockButton && (
+                    {!UIOptions.canvasActions.hideLockButton && (
                       <LockButton
                         zenModeEnabled={appState.zenModeEnabled}
                         checked={appState.activeTool.locked}
@@ -363,16 +358,21 @@ const LayerUI = ({
                         "zen-mode": appState.zenModeEnabled,
                       })}
                     >
-                      <HintViewer
-                        appState={appState}
-                        elements={elements}
-                        isMobile={device.isMobile}
-                      />
+                      {!UIOptions.canvasActions.disableHints && (
+                        <HintViewer
+                          appState={appState}
+                          elements={elements}
+                          isMobile={device.isMobile}
+                        />
+                      )}
                       {heading}
                       <Stack.Row gap={1}>
                         <ShapesSwitcher
                           appState={appState}
                           canvas={canvas}
+                          disableShortcuts={
+                            UIOptions.canvasActions.disableShortcuts
+                          }
                           activeTool={appState.activeTool}
                           setAppState={setAppState}
                           onImageAction={({ pointerType }) => {
@@ -383,7 +383,7 @@ const LayerUI = ({
                         />
                       </Stack.Row>
                     </Island>
-                    {!hideLibraries && (
+                    {!UIOptions.canvasActions.hideLibraries && (
                       <LibraryButton
                         appState={appState}
                         setAppState={setAppState}
@@ -402,7 +402,7 @@ const LayerUI = ({
               },
             )}
           >
-            {!hideUserList && (
+            {!UIOptions.canvasActions.hideUserList && (
               <UserList
                 collaborators={appState.collaborators}
                 actionManager={actionManager}
@@ -434,6 +434,7 @@ const LayerUI = ({
             <Section heading="canvasActions">
               <Island padding={1}>
                 <ZoomActions
+                  disableShortcuts={UIOptions.canvasActions.disableShortcuts}
                   renderAction={actionManager.renderAction}
                   zoom={appState.zoom}
                 />
@@ -456,7 +457,11 @@ const LayerUI = ({
                         appState.zenModeEnabled,
                     })}
                   >
-                    {actionManager.renderAction("eraser", { size: "small" })}
+                    {actionManager.renderAction("eraser", {
+                      disableShortcuts:
+                        UIOptions.canvasActions.disableShortcuts,
+                      size: "small",
+                    })}
                   </div>
                 </>
               )}
@@ -487,7 +492,7 @@ const LayerUI = ({
           {renderCustomFooter?.(false, appState)}
         </div>
 
-        {!hideHelpDialog && (
+        {!UIOptions.canvasActions.hideHelpDialog && (
           <div
             className={clsx(
               "layer-ui__wrapper__footer-right zen-mode-transition",
@@ -521,9 +526,9 @@ const LayerUI = ({
           onClose={() => setAppState({ errorMessage: null })}
         />
       )}
-      {appState.showHelpDialog && !hideHelpDialog && (
+      {appState.showHelpDialog && !UIOptions.canvasActions.hideHelpDialog && (
         <HelpDialog
-          hideLibraries={hideLibraries}
+          hideLibraries={UIOptions.canvasActions.hideLibraries}
           onClose={() => {
             setAppState({ showHelpDialog: false });
           }}
@@ -576,13 +581,21 @@ const LayerUI = ({
         onLockToggle={() => onLockToggle()}
         onPenModeToggle={onPenModeToggle}
         canvas={canvas}
+        hideColorInput={UIOptions.canvasActions.hideColorInput}
+        disableAlignItems={UIOptions.canvasActions.disableAlignItems}
+        disableGrouping={UIOptions.canvasActions.disableGrouping}
+        disableHints={UIOptions.canvasActions.disableHints}
+        disableLink={UIOptions.canvasActions.disableLink}
+        disableShortcuts={UIOptions.canvasActions.disableShortcuts}
         isCollaborating={isCollaborating}
-        hideClearCanvas={hideClearCanvas}
-        hideIOActions={hideIOActions}
-        hideLibraries={hideLibraries}
-        hideLockButton={hideLockButton}
-        hideThemeControls={hideThemeControls}
-        hideUserList={hideUserList}
+        hideClearCanvas={UIOptions.canvasActions.hideClearCanvas}
+        hideLayers={UIOptions.canvasActions.hideLayers}
+        hideIOActions={UIOptions.canvasActions.hideIOActions}
+        hideLibraries={UIOptions.canvasActions.hideLibraries}
+        hideLockButton={UIOptions.canvasActions.hideLockButton}
+        hideOpacityInput={UIOptions.canvasActions.hideOpacityInput}
+        hideThemeControls={UIOptions.canvasActions.hideThemeControls}
+        hideUserList={UIOptions.canvasActions.hideUserList}
         renderCustomFooter={renderCustomFooter}
         showThemeBtn={showThemeBtn}
         onImageAction={onImageAction}

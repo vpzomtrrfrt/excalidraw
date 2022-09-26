@@ -302,13 +302,6 @@ export interface ExcalidrawProps {
   handleKeyboardGlobally?: boolean;
   onLibraryChange?: (libraryItems: LibraryItems) => void | Promise<any>;
   autoFocus?: boolean;
-  hideClearCanvas?: boolean;
-  hideHelpDialog?: boolean;
-  hideIOActions?: boolean;
-  hideLibraries?: boolean;
-  hideLockButton?: boolean;
-  hideThemeControls?: boolean;
-  hideUserList?: boolean;
   generateIdForFile?: (file: File) => string | Promise<string>;
   onLinkOpen?: (
     element: NonDeletedExcalidrawElement,
@@ -367,14 +360,39 @@ export type ExportOpts = {
   ) => JSX.Element;
 };
 
+export type SaveAsImageOptions = {
+  defaultBackgroundValue?: boolean;
+  disableClipboard?: boolean;
+  disableScale?: boolean;
+  disableSceneEmbed?: boolean;
+  disableSelection?: boolean;
+  hideTheme?: boolean;
+};
+
 type CanvasActions = {
   changeViewBackgroundColor?: boolean;
   clearCanvas?: boolean;
+  disableAlignItems?: boolean;
+  disableGrouping?: boolean;
+  disableHints?: boolean;
+  disableLink?: boolean;
+  disableShortcuts?: boolean;
   export?: false | ExportOpts;
+  hideColorInput?: boolean;
+  hideClearCanvas?: boolean;
+  hideHelpDialog?: boolean;
+  hideIOActions?: boolean;
+  hideLibraries?: boolean;
+  hideLockButton?: boolean;
+  hideThemeControls?: boolean;
+  hideUserList?: boolean;
+  hideLayers?: boolean;
+  hideOpacityInput?: boolean;
   loadScene?: boolean;
   saveToActiveFile?: boolean;
-  theme?: boolean;
   saveAsImage?: boolean;
+  saveAsImageOptions?: SaveAsImageOptions;
+  theme?: boolean;
 };
 
 export type AppProps = Merge<

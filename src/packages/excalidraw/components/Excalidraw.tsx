@@ -39,13 +39,6 @@ const ExcalidrawBase = (props: ExcalidrawProps) => {
     handleKeyboardGlobally = false,
     onLibraryChange,
     autoFocus = false,
-    hideClearCanvas = false,
-    hideHelpDialog = false,
-    hideIOActions = false,
-    hideLibraries = false,
-    hideLockButton = false,
-    hideThemeControls = false,
-    hideUserList = false,
     generateIdForFile,
     onLinkOpen,
     onPointerDown,
@@ -112,13 +105,6 @@ const ExcalidrawBase = (props: ExcalidrawProps) => {
           handleKeyboardGlobally={handleKeyboardGlobally}
           onLibraryChange={onLibraryChange}
           autoFocus={autoFocus}
-          hideClearCanvas={hideClearCanvas}
-          hideHelpDialog={hideHelpDialog}
-          hideIOActions={hideIOActions}
-          hideLibraries={hideLibraries}
-          hideLockButton={hideLockButton}
-          hideThemeControls={hideThemeControls}
-          hideUserList={hideUserList}
           generateIdForFile={generateIdForFile}
           onLinkOpen={onLinkOpen}
           onPointerDown={onPointerDown}

@@ -270,7 +270,7 @@ export const actionLink = register({
     const selectedElements = getSelectedElements(elements, appState);
     return selectedElements.length === 1;
   },
-  PanelComponent: ({ elements, appState, updateData }) => {
+  PanelComponent: ({ elements, appState, updateData, data }) => {
     const selectedElements = getSelectedElements(elements, appState);
 
     return (
@@ -278,7 +278,9 @@ export const actionLink = register({
         type="button"
         icon={link}
         aria-label={t(getContextMenuLabel(elements, appState))}
-        title={`${t("labels.link.label")} - ${getShortcutKey("CtrlOrCmd+K")}`}
+        title={`${t("labels.link.label")}${
+          data?.disableShortcuts ? "" : ` - ${getShortcutKey("CtrlOrCmd+K")}`
+        }`}
         onClick={() => updateData(null)}
         selected={selectedElements.length === 1 && !!selectedElements[0].link}
       />

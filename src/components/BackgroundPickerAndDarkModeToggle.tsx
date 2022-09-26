@@ -7,14 +7,18 @@ export const BackgroundPickerAndDarkModeToggle = ({
   setAppState,
   actionManager,
   showThemeBtn,
+  disableShortcuts,
 }: {
   actionManager: ActionManager;
   appState: AppState;
   setAppState: React.Component<any, AppState>["setState"];
   showThemeBtn: boolean;
+  disableShortcuts?: boolean;
 }) => (
   <div style={{ display: "flex" }}>
-    {actionManager.renderAction("changeViewBackgroundColor")}
+    {actionManager.renderAction("changeViewBackgroundColor", {
+      disableShortcuts,
+    })}
     {showThemeBtn && actionManager.renderAction("toggleTheme")}
   </div>
 );

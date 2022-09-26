@@ -218,7 +218,7 @@ export const actionChangeStrokeColor = register({
       commitToHistory: !!value.currentItemStrokeColor,
     };
   },
-  PanelComponent: ({ elements, appState, updateData }) => (
+  PanelComponent: ({ elements, appState, updateData, data }) => (
     <>
       <h3 aria-hidden="true">{t("labels.stroke")}</h3>
       <ColorPicker
@@ -230,8 +230,10 @@ export const actionChangeStrokeColor = register({
           (element) => element.strokeColor,
           appState.currentItemStrokeColor,
         )}
+        hideColorInput={data?.hideColorInput}
         onChange={(color) => updateData({ currentItemStrokeColor: color })}
         isActive={appState.openPopup === "strokeColorPicker"}
+        disableShortcuts={data?.disableShortcuts}
         setActive={(active) =>
           updateData({ openPopup: active ? "strokeColorPicker" : null })
         }
@@ -261,7 +263,7 @@ export const actionChangeBackgroundColor = register({
       commitToHistory: !!value.currentItemBackgroundColor,
     };
   },
-  PanelComponent: ({ elements, appState, updateData }) => (
+  PanelComponent: ({ elements, appState, updateData, data }) => (
     <>
       <h3 aria-hidden="true">{t("labels.background")}</h3>
       <ColorPicker
@@ -273,6 +275,8 @@ export const actionChangeBackgroundColor = register({
           (element) => element.backgroundColor,
           appState.currentItemBackgroundColor,
         )}
+        hideColorInput={data?.hideColorInput}
+        disableShortcuts={data?.disableShortcuts}
         onChange={(color) => updateData({ currentItemBackgroundColor: color })}
         isActive={appState.openPopup === "backgroundColorPicker"}
         setActive={(active) =>

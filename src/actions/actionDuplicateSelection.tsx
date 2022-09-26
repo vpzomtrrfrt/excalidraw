@@ -46,13 +46,13 @@ export const actionDuplicateSelection = register({
   },
   contextItemLabel: "labels.duplicateSelection",
   keyTest: (event) => event[KEYS.CTRL_OR_CMD] && event.key === KEYS.D,
-  PanelComponent: ({ elements, appState, updateData }) => (
+  PanelComponent: ({ elements, appState, updateData, data }) => (
     <ToolButton
       type="button"
       icon={clone}
-      title={`${t("labels.duplicateSelection")} — ${getShortcutKey(
-        "CtrlOrCmd+D",
-      )}`}
+      title={`${t("labels.duplicateSelection")}${
+        data?.disableShortcuts ? "" : ` — ${getShortcutKey("CtrlOrCmd+D")}`
+      }`}
       aria-label={t("labels.duplicateSelection")}
       onClick={() => updateData(null)}
       visible={isSomeElementSelected(getNonDeletedElements(elements), appState)}

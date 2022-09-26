@@ -87,6 +87,7 @@ export class ActionManager {
             ? canvasActions[action.name as keyof typeof canvasActions]
             : true) &&
           action.keyTest &&
+          !canvasActions?.disableShortcuts &&
           action.keyTest(
             event,
             this.getAppState(),

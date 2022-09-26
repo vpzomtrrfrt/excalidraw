@@ -520,13 +520,6 @@ class App extends React.Component<AppProps, AppState> {
               }
               langCode={getLanguage().code}
               isCollaborating={this.props.isCollaborating}
-              hideClearCanvas={this.props.hideClearCanvas}
-              hideHelpDialog={this.props.hideHelpDialog}
-              hideIOActions={this.props.hideIOActions}
-              hideLibraries={this.props.hideLibraries}
-              hideLockButton={this.props.hideLockButton}
-              hideThemeControls={this.props.hideThemeControls}
-              hideUserList={this.props.hideUserList}
               renderTopRightUI={renderTopRightUI}
               renderCustomFooter={renderFooter}
               renderCustomStats={renderCustomStats}
@@ -1754,6 +1747,9 @@ class App extends React.Component<AppProps, AppState> {
 
   private onKeyDown = withBatchedUpdates(
     (event: React.KeyboardEvent | KeyboardEvent) => {
+      const { disableShortcuts, hideLibraries } =
+        this.props.UIOptions.canvasActions;
+
       // normalize `event.key` when CapsLock is pressed #2372
 
       if (
@@ -1817,7 +1813,7 @@ class App extends React.Component<AppProps, AppState> {
         this.setState({ isBindingEnabled: false });
       }
 
-      if (event.code === CODES.ZERO && !this.props.hideLibraries) {
+      if (event.code === CODES.ZERO && hideLibraries) {
         const nextState = !this.state.isLibraryOpen;
         this.setState({ isLibraryOpen: nextState });
         // track only openings
@@ -1910,6 +1906,7 @@ class App extends React.Component<AppProps, AppState> {
           return;
         }
       } else if (
+        !disableShortcuts &&
         !event.ctrlKey &&
         !event.altKey &&
         !event.metaKey &&
@@ -5675,6 +5672,7 @@ class App extends React.Component<AppProps, AppState> {
           appState: this.state,
           container: this.excalidrawContainerRef.current!,
           elements,
+          disableShortcuts: this.props.UIOptions.canvasActions.disableShortcuts,
         });
       } else {
         ContextMenu.push({
@@ -5720,6 +5718,7 @@ class App extends React.Component<AppProps, AppState> {
           appState: this.state,
           container: this.excalidrawContainerRef.current!,
           elements,
+          disableShortcuts: this.props.UIOptions.canvasActions.disableShortcuts,
         });
       }
     } else if (type === "element") {
@@ -5732,6 +5731,7 @@ class App extends React.Component<AppProps, AppState> {
           appState: this.state,
           container: this.excalidrawContainerRef.current!,
           elements,
+          disableShortcuts: this.props.UIOptions.canvasActions.disableShortcuts,
         });
       } else {
         ContextMenu.push({
@@ -5783,6 +5783,7 @@ class App extends React.Component<AppProps, AppState> {
           appState: this.state,
           container: this.excalidrawContainerRef.current!,
           elements,
+          disableShortcuts: this.props.UIOptions.canvasActions.disableShortcuts,
         });
       }
     }

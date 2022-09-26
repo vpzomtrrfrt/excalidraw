@@ -32,11 +32,25 @@ export const SelectedShapeActions = ({
   elements,
   renderAction,
   activeTool,
+  disableAlignItems,
+  disableGrouping,
+  disableLink,
+  disableShortcuts,
+  hideColorInput,
+  hideLayers,
+  hideOpacityInput,
 }: {
   appState: AppState;
   elements: readonly ExcalidrawElement[];
   renderAction: ActionManager["renderAction"];
   activeTool: AppState["activeTool"]["type"];
+  disableAlignItems?: boolean;
+  disableGrouping?: boolean;
+  disableLink?: boolean;
+  disableShortcuts?: boolean;
+  hideColorInput?: boolean;
+  hideLayers?: boolean;
+  hideOpacityInput?: boolean;
 }) => {
   const targetElements = getTargetElements(
     getNonDeletedElements(elements),
@@ -83,8 +97,12 @@ export const SelectedShapeActions = ({
         activeTool !== "image" &&
         commonSelectedType !== "image") ||
         targetElements.some((element) => hasStrokeColor(element.type))) &&
-        renderAction("changeStrokeColor")}
-      {showChangeBackgroundIcons && renderAction("changeBackgroundColor")}
+        renderAction("changeStrokeColor", { disableShortcuts, hideColorInput })}
+      {showChangeBackgroundIcons &&
+        renderAction("changeBackgroundColor", {
+          disableShortcuts,
+          hideColorInput,
+        })}
       {showFillIcons && renderAction("changeFillStyle")}
 
       {(hasStrokeWidth(activeTool) ||
@@ -128,63 +146,74 @@ export const SelectedShapeActions = ({
         <>{renderAction("changeArrowhead")}</>
       )}
 
-      {renderAction("changeOpacity")}
+      {!hideOpacityInput && renderAction("changeOpacity")}
 
-      <fieldset>
-        <legend>{t("labels.layers")}</legend>
-        <div className="buttonList">
-          {renderAction("sendToBack")}
-          {renderAction("sendBackward")}
-          {renderAction("bringToFront")}
-          {renderAction("bringForward")}
-        </div>
-      </fieldset>
-
-      {targetElements.length > 1 && !isSingleElementBoundContainer && (
+      {!hideLayers && (
         <fieldset>
-          <legend>{t("labels.align")}</legend>
+          <legend>{t("labels.layers")}</legend>
           <div className="buttonList">
-            {
-              // swap this order for RTL so the button positions always match their action
-              // (i.e. the leftmost button aligns left)
-            }
-            {isRTL ? (
-              <>
-                {renderAction("alignRight")}
-                {renderAction("alignHorizontallyCentered")}
-                {renderAction("alignLeft")}
-              </>
-            ) : (
-              <>
-                {renderAction("alignLeft")}
-                {renderAction("alignHorizontallyCentered")}
-                {renderAction("alignRight")}
-              </>
-            )}
-            {targetElements.length > 2 &&
-              renderAction("distributeHorizontally")}
-            <div className="iconRow">
-              {renderAction("alignTop")}
-              {renderAction("alignVerticallyCentered")}
-              {renderAction("alignBottom")}
+            {renderAction("sendToBack")}
+            {renderAction("sendBackward")}
+            {renderAction("bringToFront")}
+            {renderAction("bringForward")}
+          </div>
+        </fieldset>
+      )}
+
+      {targetElements.length > 1 &&
+        !isSingleElementBoundContainer &&
+        !disableAlignItems && (
+          <fieldset>
+            <legend>{t("labels.align")}</legend>
+            <div className="buttonList">
+              {
+                // swap this order for RTL so the button positions always match their action
+                // (i.e. the leftmost button aligns left)
+              }
+              {isRTL ? (
+                <>
+                  {renderAction("alignRight")}
+                  {renderAction("alignHorizontallyCentered")}
+                  {renderAction("alignLeft")}
+                </>
+              ) : (
+                <>
+                  {renderAction("alignLeft")}
+                  {renderAction("alignHorizontallyCentered")}
+                  {renderAction("alignRight")}
+                </>
+              )}
               {targetElements.length > 2 &&
-                renderAction("distributeVertically")}
+                renderAction("distributeHorizontally")}
+              <div className="iconRow">
+                {renderAction("alignTop")}
+                {renderAction("alignVerticallyCentered")}
+                {renderAction("alignBottom")}
+                {targetElements.length > 2 &&
+                  renderAction("distributeVertically")}
+              </div>
             </div>
-          </div>
-        </fieldset>
-      )}
-      {!isEditing && targetElements.length > 0 && (
-        <fieldset>
-          <legend>{t("labels.actions")}</legend>
-          <div className="buttonList">
-            {!device.isMobile && renderAction("duplicateSelection")}
-            {!device.isMobile && renderAction("deleteSelectedElements")}
-            {renderAction("group")}
-            {renderAction("ungroup")}
-            {showLinkIcon && renderAction("hyperlink")}
-          </div>
-        </fieldset>
-      )}
+          </fieldset>
+        )}
+      {!isEditing &&
+        targetElements.length > 0 &&
+        !(device.isMobile && disableGrouping) && (
+          <fieldset>
+            <legend>{t("labels.actions")}</legend>
+            <div className="buttonList">
+              {!device.isMobile &&
+                renderAction("duplicateSelection", { disableShortcuts })}
+              {!device.isMobile && renderAction("deleteSelectedElements")}
+              {!disableGrouping && (
+                <>
+                  {renderAction("group", { disableShortcuts })}
+                  {renderAction("ungroup", { disableShortcuts })}
+                </>
+              )}
+              {showLinkIcon && !disableLink && renderAction("hyperlink")}
+            </div>
+          </fieldset>
+        )}
     </div>
   );
 };
@@ -192,12 +221,14 @@ export const SelectedShapeActions = ({
 export const ShapesSwitcher = ({
   canvas,
   activeTool,
+  disableShortcuts,
   setAppState,
   onImageAction,
   appState,
 }: {
   canvas: HTMLCanvasElement | null;
   activeTool: AppState["activeTool"];
+  disableShortcuts?: boolean;
   setAppState: React.Component<any, AppState>["setState"];
   onImageAction: (data: { pointerType: PointerType | null }) => void;
   appState: AppState;
@@ -209,6 +240,9 @@ export const ShapesSwitcher = ({
       const shortcut = letter
         ? `${capitalizeString(letter)} ${t("helpDialog.or")} ${index + 1}`
         : `${index + 1}`;
+      const title = disableShortcuts
+        ? capitalizeString(label)
+        : `${capitalizeString(label)} — ${shortcut}`;
       return (
         <ToolButton
           className="Shape"
@@ -217,7 +251,8 @@ export const ShapesSwitcher = ({
           icon={icon}
           checked={activeTool.type === value}
           name="editor-current-shape"
-          title={`${capitalizeString(label)} — ${shortcut}`}
+          title={title}
+          disableShortcuts={disableShortcuts}
           keyBindingLabel={`${index + 1}`}
           aria-label={capitalizeString(label)}
           aria-keyshortcuts={shortcut}
@@ -257,16 +292,18 @@ export const ShapesSwitcher = ({
 );
 
 export const ZoomActions = ({
+  disableShortcuts,
   renderAction,
   zoom,
 }: {
+  disableShortcuts?: boolean;
   renderAction: ActionManager["renderAction"];
   zoom: Zoom;
 }) => (
   <Stack.Col gap={1}>
     <Stack.Row gap={1} align="center">
-      {renderAction("zoomOut")}
-      {renderAction("zoomIn")}
+      {renderAction("zoomOut", { disableShortcuts })}
+      {renderAction("zoomIn", { disableShortcuts })}
       {renderAction("resetZoom")}
     </Stack.Row>
   </Stack.Col>

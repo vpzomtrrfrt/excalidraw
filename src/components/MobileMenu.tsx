@@ -31,11 +31,19 @@ type MobileMenuProps = {
   onLockToggle: () => void;
   onPenModeToggle: () => void;
   canvas: HTMLCanvasElement | null;
+  disableAlignItems?: boolean;
+  disableGrouping?: boolean;
+  disableHints?: boolean;
+  disableLink?: boolean;
+  disableShortcuts?: boolean;
   isCollaborating: boolean;
   hideClearCanvas?: boolean;
+  hideColorInput?: boolean;
   hideIOActions?: boolean;
+  hideLayers?: boolean;
   hideLibraries?: boolean;
   hideLockButton?: boolean;
+  hideOpacityInput?: boolean;
   hideThemeControls?: boolean;
   hideUserList?: boolean;
   renderCustomFooter?: (
@@ -63,11 +71,19 @@ export const MobileMenu = ({
   onLockToggle,
   onPenModeToggle,
   canvas,
+  hideColorInput,
+  disableAlignItems,
+  disableGrouping,
+  disableHints,
+  disableLink,
+  disableShortcuts,
   isCollaborating,
   hideClearCanvas,
   hideIOActions,
+  hideLayers,
   hideLibraries,
   hideLockButton,
+  hideOpacityInput,
   hideThemeControls,
   hideUserList,
   renderCustomFooter,
@@ -90,6 +106,7 @@ export const MobileMenu = ({
                       appState={appState}
                       canvas={canvas}
                       activeTool={appState.activeTool}
+                      disableShortcuts={disableShortcuts}
                       setAppState={setAppState}
                       onImageAction={({ pointerType }) => {
                         onImageAction({
@@ -127,7 +144,9 @@ export const MobileMenu = ({
             </Stack.Col>
           )}
         </Section>
-        <HintViewer appState={appState} elements={elements} isMobile={true} />
+        {!disableHints && (
+          <HintViewer appState={appState} elements={elements} isMobile={true} />
+        )}
       </FixedSideContainer>
     );
   };
@@ -154,7 +173,8 @@ export const MobileMenu = ({
 
         {actionManager.renderAction("undo")}
         {actionManager.renderAction("redo")}
-        {showEraser && actionManager.renderAction("eraser")}
+        {showEraser &&
+          actionManager.renderAction("eraser", { disableShortcuts })}
 
         {actionManager.renderAction(
           appState.multiElement ? "finalize" : "duplicateSelection",
@@ -196,6 +216,7 @@ export const MobileMenu = ({
             appState={appState}
             setAppState={setAppState}
             showThemeBtn={showThemeBtn}
+            disableShortcuts={disableShortcuts}
           />
         )}
       </>
@@ -242,6 +263,13 @@ export const MobileMenu = ({
                 elements={elements}
                 renderAction={actionManager.renderAction}
                 activeTool={appState.activeTool.type}
+                disableAlignItems={disableAlignItems}
+                disableGrouping={disableGrouping}
+                disableLink={disableLink}
+                hideLayers={hideLayers}
+                hideOpacityInput={hideOpacityInput}
+                disableShortcuts={disableShortcuts}
+                hideColorInput={hideColorInput}
               />
             </Section>
           ) : null}

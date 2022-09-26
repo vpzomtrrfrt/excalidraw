@@ -28,7 +28,7 @@ export const actionChangeViewBackgroundColor = register({
       commitToHistory: !!value.viewBackgroundColor,
     };
   },
-  PanelComponent: ({ elements, appState, updateData }) => {
+  PanelComponent: ({ elements, appState, updateData, data }) => {
     return (
       <div style={{ position: "relative" }}>
         <ColorPicker
@@ -43,6 +43,7 @@ export const actionChangeViewBackgroundColor = register({
           data-testid="canvas-background-picker"
           elements={elements}
           appState={appState}
+          {...data}
         />
       </div>
     );
@@ -100,11 +101,13 @@ export const actionZoomIn = register({
       commitToHistory: false,
     };
   },
-  PanelComponent: ({ updateData }) => (
+  PanelComponent: ({ updateData, data }) => (
     <ToolButton
       type="button"
       icon={zoomIn}
-      title={`${t("buttons.zoomIn")} — ${getShortcutKey("CtrlOrCmd++")}`}
+      title={`${t("buttons.zoomIn")}${
+        data?.disableShortcuts ? "" : ` — ${getShortcutKey("CtrlOrCmd++")}`
+      }`}
       aria-label={t("buttons.zoomIn")}
       onClick={() => {
         updateData(null);
@@ -136,11 +139,13 @@ export const actionZoomOut = register({
       commitToHistory: false,
     };
   },
-  PanelComponent: ({ updateData }) => (
+  PanelComponent: ({ updateData, data }) => (
     <ToolButton
       type="button"
       icon={zoomOut}
-      title={`${t("buttons.zoomOut")} — ${getShortcutKey("CtrlOrCmd+-")}`}
+      title={`${t("buttons.zoomOut")}${
+        data?.disableShortcuts ? "" : ` — ${getShortcutKey("CtrlOrCmd+-")}`
+      }`}
       aria-label={t("buttons.zoomOut")}
       onClick={() => {
         updateData(null);
@@ -336,7 +341,9 @@ export const actionErase = register({
       type="button"
       icon={eraser}
       className={clsx("eraser", { active: isEraserActive(appState) })}
-      title={`${t("toolBar.eraser")}-${getShortcutKey("E")}`}
+      title={`${t("toolBar.eraser")}${
+        data?.disableShortcuts ? "" : ` - ${getShortcutKey("E")}`
+      }`}
       aria-label={t("toolBar.eraser")}
       onClick={() => {
         updateData(null);

@@ -94,6 +94,8 @@ const Picker = ({
   showInput = true,
   type,
   elements,
+  disableShortcuts,
+  hideColorInput,
 }: {
   colors: string[];
   color: string | null;
@@ -103,6 +105,8 @@ const Picker = ({
   showInput: boolean;
   type: "canvasBackground" | "elementBackground" | "elementStroke";
   elements: readonly ExcalidrawElement[];
+  disableShortcuts?: boolean;
+  hideColorInput?: boolean;
 }) => {
   const firstItem = React.useRef<HTMLButtonElement>();
   const activeItem = React.useRef<HTMLButtonElement>();
@@ -169,6 +173,7 @@ const Picker = ({
       }
       event.preventDefault();
     } else if (
+      !disableShortcuts &&
       keyBindings.includes(event.key.toLowerCase()) &&
       !event[KEYS.CTRL_OR_CMD] &&
       !event.altKey &&
@@ -219,7 +224,9 @@ const Picker = ({
             !isTransparent(_color) ? ` (${_color})` : ""
           } — ${keyBinding.toUpperCase()}`}
           aria-label={label}
-          aria-keyshortcuts={keyBindings[i]}
+          {...(!disableShortcuts
+            ? { "aria-keyshortcuts": keyBindings[i] }
+            : {})}
           style={{ color: _color }}
           key={_color}
           ref={(el) => {
@@ -237,7 +244,9 @@ const Picker = ({
           {isTransparent(_color) ? (
             <div className="color-picker-transparent"></div>
           ) : undefined}
-          <span className="color-picker-keybinding">{keyBinding}</span>
+          {!disableShortcuts && (
+            <span className="color-picker-keybinding">{keyBinding}</span>
+          )}
         </button>
       );
     });
@@ -277,7 +286,7 @@ const Picker = ({
           </div>
         )}
 
-        {showInput && (
+        {showInput && !hideColorInput && (
           <ColorInput
             color={color}
             label={label}
@@ -352,6 +361,8 @@ export const ColorPicker = ({
   setActive,
   elements,
   appState,
+  disableShortcuts,
+  hideColorInput,
 }: {
   type: "canvasBackground" | "elementBackground" | "elementStroke";
   color: string | null;
@@ -361,6 +372,8 @@ export const ColorPicker = ({
   setActive: (active: boolean) => void;
   elements: readonly ExcalidrawElement[];
   appState: AppState;
+  disableShortcuts?: boolean;
+  hideColorInput?: boolean;
 }) => {
   const pickerButton = React.useRef<HTMLButtonElement>(null);
 
@@ -374,13 +387,15 @@ export const ColorPicker = ({
           onClick={() => setActive(!isActive)}
           ref={pickerButton}
         />
-        <ColorInput
-          color={color}
-          label={label}
-          onChange={(color) => {
-            onChange(color);
-          }}
-        />
+        {!hideColorInput && (
+          <ColorInput
+            color={color}
+            label={label}
+            onChange={(color) => {
+              onChange(color);
+            }}
+          />
+        )}
       </div>
       <React.Suspense fallback="">
         {isActive ? (
@@ -403,6 +418,8 @@ export const ColorPicker = ({
               showInput={false}
               type={type}
               elements={elements}
+              disableShortcuts={disableShortcuts}
+              hideColorInput={hideColorInput}
             />
           </Popover>
         ) : null}

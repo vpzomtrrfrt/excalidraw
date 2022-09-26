@@ -23,6 +23,7 @@ type ContextMenuProps = {
   actionManager: ActionManager;
   appState: Readonly<AppState>;
   elements: readonly NonDeletedExcalidrawElement[];
+  disableShortcuts?: boolean;
 };
 
 const ContextMenu = ({
@@ -33,6 +34,7 @@ const ContextMenu = ({
   actionManager,
   appState,
   elements,
+  disableShortcuts,
 }: ContextMenuProps) => {
   return (
     <Popover
@@ -75,11 +77,13 @@ const ContextMenu = ({
                 }
               >
                 <div className="context-menu-option__label">{label}</div>
-                <kbd className="context-menu-option__shortcut">
-                  {actionName
-                    ? getShortcutFromShortcutName(actionName as ShortcutName)
-                    : ""}
-                </kbd>
+                {!disableShortcuts && (
+                  <kbd className="context-menu-option__shortcut">
+                    {actionName
+                      ? getShortcutFromShortcutName(actionName as ShortcutName)
+                      : ""}
+                  </kbd>
+                )}
               </button>
             </li>
           );
@@ -112,6 +116,7 @@ type ContextMenuParams = {
   appState: Readonly<AppState>;
   container: HTMLElement;
   elements: readonly NonDeletedExcalidrawElement[];
+  disableShortcuts?: boolean;
 };
 
 const handleClose = (container: HTMLElement) => {
@@ -141,6 +146,7 @@ export default {
           actionManager={params.actionManager}
           appState={params.appState}
           elements={params.elements}
+          disableShortcuts={params.disableShortcuts}
         />,
         getContextMenuNode(params.container),
       );

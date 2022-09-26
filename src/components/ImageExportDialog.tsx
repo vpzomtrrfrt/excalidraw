@@ -8,7 +8,7 @@ import { t } from "../i18n";
 import { useDevice } from "./App";
 import { getSelectedElements, isSomeElementSelected } from "../scene";
 import { exportToCanvas } from "../scene/export";
-import { AppState, BinaryFiles } from "../types";
+import { AppState, BinaryFiles, SaveAsImageOptions } from "../types";
 import { Dialog } from "./Dialog";
 import { clipboard, exportImage } from "./icons";
 import Stack from "./Stack";
@@ -81,6 +81,7 @@ const ImageExportModal = ({
   elements,
   appState,
   files,
+  options,
   exportPadding = DEFAULT_EXPORT_PADDING,
   actionManager,
   onExportToPng,
@@ -90,6 +91,7 @@ const ImageExportModal = ({
   appState: AppState;
   elements: readonly NonDeletedExcalidrawElement[];
   files: BinaryFiles;
+  options: SaveAsImageOptions;
   exportPadding?: number;
   actionManager: ActionManager;
   onExportToPng: ExportCB;
@@ -144,6 +146,7 @@ const ImageExportModal = ({
     <div className="ExportDialog">
       <div className="ExportDialog__preview" ref={previewRef} />
       {supportsContextFilters &&
+        !options.hideTheme &&
         actionManager.renderAction("exportWithDarkMode")}
       <div style={{ display: "grid", gridTemplateColumns: "1fr" }}>
         <div
@@ -155,8 +158,9 @@ const ImageExportModal = ({
             overflow: "hidden",
           }}
         >
-          {actionManager.renderAction("changeExportBackground")}
-          {someElementIsSelected && (
+          {!options.defaultBackgroundValue &&
+            actionManager.renderAction("changeExportBackground")}
+          {!options.disableSelection && someElementIsSelected && (
             <CheckboxItem
               checked={exportSelected}
               onChange={(checked) => setExportSelected(checked)}
@@ -164,17 +168,22 @@ const ImageExportModal = ({
               {t("labels.onlySelected")}
             </CheckboxItem>
           )}
-          {actionManager.renderAction("changeExportEmbedScene")}
+          {!options.disableSceneEmbed &&
+            actionManager.renderAction("changeExportEmbedScene")}
         </div>
       </div>
-      <div style={{ display: "flex", alignItems: "center", marginTop: ".6em" }}>
-        <Stack.Row gap={2}>
-          {actionManager.renderAction("changeExportScale")}
-        </Stack.Row>
-        <p style={{ marginLeft: "1em", userSelect: "none" }}>
-          {t("buttons.scale")}
-        </p>
-      </div>
+      {!options.disableScale && (
+        <div
+          style={{ display: "flex", alignItems: "center", marginTop: ".6em" }}
+        >
+          <Stack.Row gap={2}>
+            {actionManager.renderAction("changeExportScale")}
+          </Stack.Row>
+          <p style={{ marginLeft: "1em", userSelect: "none" }}>
+            {t("buttons.scale")}
+          </p>
+        </div>
+      )}
       <div
         style={{
           display: "flex",
@@ -203,7 +212,7 @@ const ImageExportModal = ({
         >
           SVG
         </ExportButton>
-        {probablySupportsClipboardBlob && (
+        {probablySupportsClipboardBlob && !options.disableClipboard && (
           <ExportButton
             title={t("buttons.copyPngToClipboard")}
             onClick={() => onExportToClipboard(exportedElements)}
@@ -222,6 +231,7 @@ export const ImageExportDialog = ({
   elements,
   appState,
   files,
+  options,
   exportPadding = DEFAULT_EXPORT_PADDING,
   actionManager,
   onExportToPng,
@@ -231,6 +241,7 @@ export const ImageExportDialog = ({
   appState: AppState;
   elements: readonly NonDeletedExcalidrawElement[];
   files: BinaryFiles;
+  options: SaveAsImageOptions;
   exportPadding?: number;
   actionManager: ActionManager;
   onExportToPng: ExportCB;
@@ -262,6 +273,7 @@ export const ImageExportDialog = ({
             elements={elements}
             appState={appState}
             files={files}
+            options={options}
             exportPadding={exportPadding}
             actionManager={actionManager}
             onExportToPng={onExportToPng}

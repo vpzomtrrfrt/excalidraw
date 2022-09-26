@@ -85,6 +85,7 @@
   .panelColumn {
     display: flex;
     flex-direction: column;
+    text-align: left;
 
     h3,
     legend,
@@ -119,6 +120,7 @@
 
     .buttonList {
       flex-wrap: wrap;
+      text-align: left;
 
       label {
         margin-right: 0.25rem;
@@ -389,7 +391,7 @@
   }
 
   .App-menu__left {
-    overflow-y: auto;
+    // overflow-y: auto;
     box-shadow: var(--shadow-island);
   }
 
