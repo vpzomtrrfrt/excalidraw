@@ -5775,7 +5775,7 @@ class App extends React.Component<AppProps, AppState> {
               separator,
             !this.props.UIOptions.canvasActions.hideLibraries &&
               actionAddToLibrary,
-            separator,
+            !this.props.UIOptions.canvasActions.hideLibraries && separator,
             !this.props.UIOptions.canvasActions.hideLayers &&
               actionSendBackward,
             !this.props.UIOptions.canvasActions.hideLayers &&
