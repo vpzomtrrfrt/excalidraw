@@ -540,15 +540,17 @@ class App extends React.Component<AppProps, AppState> {
             />
             <div className="excalidraw-textEditorContainer" />
             <div className="excalidraw-contextMenuContainer" />
-            {selectedElement.length === 1 && this.state.showHyperlinkPopup && (
-              <Hyperlink
-                key={selectedElement[0].id}
-                element={selectedElement[0]}
-                appState={this.state}
-                setAppState={this.setAppState}
-                onLinkOpen={this.props.onLinkOpen}
-              />
-            )}
+            {selectedElement.length === 1 &&
+              this.state.showHyperlinkPopup &&
+              !this.props.UIOptions.canvasActions.disableLink && (
+                <Hyperlink
+                  key={selectedElement[0].id}
+                  element={selectedElement[0]}
+                  appState={this.state}
+                  setAppState={this.setAppState}
+                  onLinkOpen={this.props.onLinkOpen}
+                />
+              )}
             {this.state.toast !== null && (
               <Toast
                 message={this.state.toast.message}
@@ -5756,22 +5758,38 @@ class App extends React.Component<AppProps, AppState> {
             actionCopyStyles,
             actionPasteStyles,
             separator,
-            maybeGroupAction && actionGroup,
-            mayBeAllowUnbinding && actionUnbindText,
-            mayBeAllowBinding && actionBindText,
-            maybeUngroupAction && actionUngroup,
-            (maybeGroupAction || maybeUngroupAction) && separator,
-            actionAddToLibrary,
+            !this.props.UIOptions.canvasActions.disableGrouping &&
+              maybeGroupAction &&
+              actionGroup,
+            !this.props.UIOptions.canvasActions.disableGrouping &&
+              mayBeAllowUnbinding &&
+              actionUnbindText,
+            !this.props.UIOptions.canvasActions.disableGrouping &&
+              mayBeAllowBinding &&
+              actionBindText,
+            !this.props.UIOptions.canvasActions.disableGrouping &&
+              maybeUngroupAction &&
+              actionUngroup,
+            !this.props.UIOptions.canvasActions.disableGrouping &&
+              (maybeGroupAction || maybeUngroupAction) &&
+              separator,
+            !this.props.UIOptions.canvasActions.hideLibraries &&
+              actionAddToLibrary,
             separator,
-            actionSendBackward,
-            actionBringForward,
-            actionSendToBack,
-            actionBringToFront,
-            separator,
+            !this.props.UIOptions.canvasActions.hideLayers &&
+              actionSendBackward,
+            !this.props.UIOptions.canvasActions.hideLayers &&
+              actionBringForward,
+            !this.props.UIOptions.canvasActions.hideLayers && actionSendToBack,
+            !this.props.UIOptions.canvasActions.hideLayers &&
+              actionBringToFront,
+            !this.props.UIOptions.canvasActions.hideLayers && separator,
             maybeFlipHorizontal && actionFlipHorizontal,
             maybeFlipVertical && actionFlipVertical,
             (maybeFlipHorizontal || maybeFlipVertical) && separator,
-            actionLink.contextItemPredicate(elements, this.state) && actionLink,
+            !this.props.UIOptions.canvasActions.disableLink &&
+              actionLink.contextItemPredicate(elements, this.state) &&
+              actionLink,
             actionDuplicateSelection,
             actionToggleLock,
             separator,
