@@ -144,6 +144,7 @@ export const URL_HASH_KEYS = {
 
 export const DEFAULT_UI_OPTIONS: AppProps["UIOptions"] = {
   canvasActions: {
+    allowedShortcuts: [],
     changeViewBackgroundColor: true,
     clearCanvas: true,
     disableAlignItems: false,
