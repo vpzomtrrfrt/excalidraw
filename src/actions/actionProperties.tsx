@@ -530,36 +530,52 @@ export const actionChangeFontSize = register({
   perform: (elements, appState, value) => {
     return changeFontSize(elements, appState, () => value, value);
   },
-  PanelComponent: ({ elements, appState, updateData }) => (
+  PanelComponent: ({ elements, appState, updateData, data }) => (
     <fieldset>
       <legend>{t("labels.fontSize")}</legend>
       <ButtonIconSelect
         group="font-size"
         options={[
-          {
-            value: 16,
-            text: t("labels.small"),
-            icon: <FontSizeSmallIcon theme={appState.theme} />,
-            testId: "fontSize-small",
-          },
-          {
-            value: 20,
-            text: t("labels.medium"),
-            icon: <FontSizeMediumIcon theme={appState.theme} />,
-            testId: "fontSize-medium",
-          },
-          {
-            value: 28,
-            text: t("labels.large"),
-            icon: <FontSizeLargeIcon theme={appState.theme} />,
-            testId: "fontSize-large",
-          },
-          {
-            value: 36,
-            text: t("labels.veryLarge"),
-            icon: <FontSizeExtraLargeIcon theme={appState.theme} />,
-            testId: "fontSize-veryLarge",
-          },
+          ...(data?.fontSizeOptions.includes("s")
+            ? [
+                {
+                  value: 16,
+                  text: t("labels.small"),
+                  icon: <FontSizeSmallIcon theme={appState.theme} />,
+                  testId: "fontSize-small",
+                },
+              ]
+            : []),
+          ...(data?.fontSizeOptions.includes("m")
+            ? [
+                {
+                  value: 20,
+                  text: t("labels.medium"),
+                  icon: <FontSizeMediumIcon theme={appState.theme} />,
+                  testId: "fontSize-medium",
+                },
+              ]
+            : []),
+          ...(data?.fontSizeOptions.includes("l")
+            ? [
+                {
+                  value: 28,
+                  text: t("labels.large"),
+                  icon: <FontSizeLargeIcon theme={appState.theme} />,
+                  testId: "fontSize-large",
+                },
+              ]
+            : []),
+          ...(data?.fontSizeOptions.includes("xl")
+            ? [
+                {
+                  value: 36,
+                  text: t("labels.veryLarge"),
+                  icon: <FontSizeExtraLargeIcon theme={appState.theme} />,
+                  testId: "fontSize-veryLarge",
+                },
+              ]
+            : []),
         ]}
         value={getFormValue(
           elements,

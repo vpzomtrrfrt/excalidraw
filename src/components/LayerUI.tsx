@@ -264,9 +264,18 @@ const LayerUI = ({
           disableGrouping={UIOptions.canvasActions.disableGrouping}
           disableLink={UIOptions.canvasActions.disableLink}
           disableShortcuts={UIOptions.canvasActions.disableShortcuts}
+          disableVerticalAlignOptions={
+            UIOptions.canvasActions.disableVerticalAlignOptions
+          }
+          fontSizeOptions={UIOptions.canvasActions.fontSizeOptions}
+          hideArrowHeadsOptions={UIOptions.canvasActions.hideArrowHeadsOptions}
           hideColorInput={UIOptions.canvasActions.hideColorInput}
+          hideFontFamily={UIOptions.canvasActions.hideFontFamily}
           hideLayers={UIOptions.canvasActions.hideLayers}
           hideOpacityInput={UIOptions.canvasActions.hideOpacityInput}
+          hideSharpness={UIOptions.canvasActions.hideSharpness}
+          hideStrokeStyle={UIOptions.canvasActions.hideStrokeStyle}
+          hideTextAlign={UIOptions.canvasActions.hideTextAlign}
         />
       </Island>
     </Section>
@@ -583,6 +592,10 @@ const LayerUI = ({
         onPenModeToggle={onPenModeToggle}
         canvas={canvas}
         hideColorInput={UIOptions.canvasActions.hideColorInput}
+        disableVerticalAlignOptions={
+          UIOptions.canvasActions.disableVerticalAlignOptions
+        }
+        hideArrowHeadsOptions={UIOptions.canvasActions.hideArrowHeadsOptions}
         disableAlignItems={UIOptions.canvasActions.disableAlignItems}
         disableGrouping={UIOptions.canvasActions.disableGrouping}
         disableHints={UIOptions.canvasActions.disableHints}
@@ -590,11 +603,15 @@ const LayerUI = ({
         disableShortcuts={UIOptions.canvasActions.disableShortcuts}
         isCollaborating={isCollaborating}
         hideClearCanvas={UIOptions.canvasActions.hideClearCanvas}
+        hideFontFamily={UIOptions.canvasActions.hideFontFamily}
         hideLayers={UIOptions.canvasActions.hideLayers}
         hideIOActions={UIOptions.canvasActions.hideIOActions}
         hideLibraries={UIOptions.canvasActions.hideLibraries}
         hideLockButton={UIOptions.canvasActions.hideLockButton}
         hideOpacityInput={UIOptions.canvasActions.hideOpacityInput}
+        hideSharpness={UIOptions.canvasActions.hideSharpness}
+        hideStrokeStyle={UIOptions.canvasActions.hideStrokeStyle}
+        hideTextAlign={UIOptions.canvasActions.hideTextAlign}
         hideThemeControls={UIOptions.canvasActions.hideThemeControls}
         hideUserList={UIOptions.canvasActions.hideUserList}
         renderCustomFooter={renderCustomFooter}

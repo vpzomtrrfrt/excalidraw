@@ -36,14 +36,21 @@ type MobileMenuProps = {
   disableHints?: boolean;
   disableLink?: boolean;
   disableShortcuts?: boolean;
+  disableVerticalAlignOptions?: boolean;
+  fontSizeOptions?: Array<String>;
   isCollaborating: boolean;
+  hideArrowHeadsOptions?: boolean;
   hideClearCanvas?: boolean;
   hideColorInput?: boolean;
+  hideFontFamily?: boolean;
   hideIOActions?: boolean;
   hideLayers?: boolean;
   hideLibraries?: boolean;
   hideLockButton?: boolean;
   hideOpacityInput?: boolean;
+  hideSharpness?: boolean;
+  hideStrokeStyle?: boolean;
+  hideTextAlign?: boolean;
   hideThemeControls?: boolean;
   hideUserList?: boolean;
   renderCustomFooter?: (
@@ -71,19 +78,26 @@ export const MobileMenu = ({
   onLockToggle,
   onPenModeToggle,
   canvas,
-  hideColorInput,
   disableAlignItems,
   disableGrouping,
   disableHints,
   disableLink,
   disableShortcuts,
+  disableVerticalAlignOptions,
+  hideArrowHeadsOptions,
+  fontSizeOptions,
   isCollaborating,
   hideClearCanvas,
+  hideColorInput,
+  hideFontFamily,
   hideIOActions,
   hideLayers,
   hideLibraries,
   hideLockButton,
   hideOpacityInput,
+  hideSharpness,
+  hideStrokeStyle,
+  hideTextAlign,
   hideThemeControls,
   hideUserList,
   renderCustomFooter,
@@ -266,10 +280,17 @@ export const MobileMenu = ({
                 disableAlignItems={disableAlignItems}
                 disableGrouping={disableGrouping}
                 disableLink={disableLink}
+                disableVerticalAlignOptions={disableVerticalAlignOptions}
+                fontSizeOptions={fontSizeOptions}
+                hideArrowHeadsOptions={hideArrowHeadsOptions}
                 hideLayers={hideLayers}
                 hideOpacityInput={hideOpacityInput}
                 disableShortcuts={disableShortcuts}
                 hideColorInput={hideColorInput}
+                hideFontFamily={hideFontFamily}
+                hideSharpness={hideSharpness}
+                hideStrokeStyle={hideStrokeStyle}
+                hideTextAlign={hideTextAlign}
               />
             </Section>
           ) : null}

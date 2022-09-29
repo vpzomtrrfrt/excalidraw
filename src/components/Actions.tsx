@@ -36,9 +36,16 @@ export const SelectedShapeActions = ({
   disableGrouping,
   disableLink,
   disableShortcuts,
+  disableVerticalAlignOptions,
+  fontSizeOptions,
+  hideArrowHeadsOptions,
   hideColorInput,
+  hideFontFamily,
   hideLayers,
   hideOpacityInput,
+  hideSharpness,
+  hideStrokeStyle,
+  hideTextAlign,
 }: {
   appState: AppState;
   elements: readonly ExcalidrawElement[];
@@ -48,9 +55,16 @@ export const SelectedShapeActions = ({
   disableGrouping?: boolean;
   disableLink?: boolean;
   disableShortcuts?: boolean;
+  disableVerticalAlignOptions?: boolean;
+  fontSizeOptions?: Array<String>;
+  hideArrowHeadsOptions?: boolean;
   hideColorInput?: boolean;
+  hideFontFamily?: boolean;
   hideLayers?: boolean;
   hideOpacityInput?: boolean;
+  hideSharpness?: boolean;
+  hideStrokeStyle?: boolean;
+  hideTextAlign?: boolean;
 }) => {
   const targetElements = getTargetElements(
     getNonDeletedElements(elements),
@@ -113,38 +127,43 @@ export const SelectedShapeActions = ({
         targetElements.some((element) => element.type === "freedraw")) &&
         renderAction("changeStrokeShape")}
 
-      {(hasStrokeStyle(activeTool) ||
-        targetElements.some((element) => hasStrokeStyle(element.type))) && (
-        <>
-          {renderAction("changeStrokeStyle")}
-          {renderAction("changeSloppiness")}
-        </>
-      )}
+      {!hideStrokeStyle &&
+        (hasStrokeStyle(activeTool) ||
+          targetElements.some((element) => hasStrokeStyle(element.type))) && (
+          <>
+            {renderAction("changeStrokeStyle")}
+            {renderAction("changeSloppiness")}
+          </>
+        )}
 
-      {(canChangeSharpness(activeTool) ||
-        targetElements.some((element) => canChangeSharpness(element.type))) && (
-        <>{renderAction("changeSharpness")}</>
-      )}
+      {!hideSharpness &&
+        (canChangeSharpness(activeTool) ||
+          targetElements.some((element) =>
+            canChangeSharpness(element.type),
+          )) && <>{renderAction("changeSharpness")}</>}
 
       {(hasText(activeTool) ||
         targetElements.some((element) => hasText(element.type))) && (
         <>
-          {renderAction("changeFontSize")}
+          {renderAction("changeFontSize", { fontSizeOptions })}
 
-          {renderAction("changeFontFamily")}
+          {!hideFontFamily && renderAction("changeFontFamily")}
 
-          {renderAction("changeTextAlign")}
+          {!hideTextAlign && renderAction("changeTextAlign")}
         </>
       )}
 
-      {targetElements.some(
-        (element) =>
-          hasBoundTextElement(element) || isBoundToContainer(element),
-      ) && renderAction("changeVerticalAlign")}
-      {(canHaveArrowheads(activeTool) ||
-        targetElements.some((element) => canHaveArrowheads(element.type))) && (
-        <>{renderAction("changeArrowhead")}</>
-      )}
+      {!disableVerticalAlignOptions &&
+        targetElements.some(
+          (element) =>
+            hasBoundTextElement(element) || isBoundToContainer(element),
+        ) &&
+        renderAction("changeVerticalAlign")}
+      {!hideArrowHeadsOptions &&
+        (canHaveArrowheads(activeTool) ||
+          targetElements.some((element) =>
+            canHaveArrowheads(element.type),
+          )) && <>{renderAction("changeArrowhead")}</>}
 
       {!hideOpacityInput && renderAction("changeOpacity")}
 
