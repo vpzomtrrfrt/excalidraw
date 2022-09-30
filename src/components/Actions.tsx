@@ -240,6 +240,7 @@ export const SelectedShapeActions = ({
 export const ShapesSwitcher = ({
   canvas,
   activeTool,
+  allowedShapes,
   disableShortcuts,
   setAppState,
   onImageAction,
@@ -247,13 +248,16 @@ export const ShapesSwitcher = ({
 }: {
   canvas: HTMLCanvasElement | null;
   activeTool: AppState["activeTool"];
+  allowedShapes: Array<String>;
   disableShortcuts?: boolean;
   setAppState: React.Component<any, AppState>["setState"];
   onImageAction: (data: { pointerType: PointerType | null }) => void;
   appState: AppState;
 }) => (
   <>
-    {SHAPES.map(({ value, icon, key }, index) => {
+    {SHAPES.filter(
+      (shape) => !allowedShapes.length || allowedShapes.includes(shape.value),
+    ).map(({ value, icon, key }, index) => {
       const label = t(`toolBar.${value}`);
       const letter = key && (typeof key === "string" ? key : key[0]);
       const shortcut = letter

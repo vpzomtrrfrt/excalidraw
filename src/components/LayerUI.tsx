@@ -379,6 +379,7 @@ const LayerUI = ({
                       <Stack.Row gap={1}>
                         <ShapesSwitcher
                           appState={appState}
+                          allowedShapes={UIOptions.canvasActions.allowedShapes}
                           canvas={canvas}
                           disableShortcuts={
                             UIOptions.canvasActions.disableShortcuts
@@ -591,6 +592,7 @@ const LayerUI = ({
         onLockToggle={() => onLockToggle()}
         onPenModeToggle={onPenModeToggle}
         canvas={canvas}
+        allowedShapes={UIOptions.canvasActions.allowedShapes}
         hideColorInput={UIOptions.canvasActions.hideColorInput}
         disableVerticalAlignOptions={
           UIOptions.canvasActions.disableVerticalAlignOptions

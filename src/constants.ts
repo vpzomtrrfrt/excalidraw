@@ -144,6 +144,7 @@ export const URL_HASH_KEYS = {
 
 export const DEFAULT_UI_OPTIONS: AppProps["UIOptions"] = {
   canvasActions: {
+    allowedShapes: [],
     allowedShortcuts: [],
     changeViewBackgroundColor: true,
     clearCanvas: true,
@@ -151,6 +152,7 @@ export const DEFAULT_UI_OPTIONS: AppProps["UIOptions"] = {
     disableGrouping: false,
     disableHints: false,
     disableLink: false,
+    disableFileDrop: false,
     disableShortcuts: false,
     disableVerticalAlignOptions: false,
     export: { saveFileToDisk: true },

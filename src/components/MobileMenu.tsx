@@ -31,6 +31,7 @@ type MobileMenuProps = {
   onLockToggle: () => void;
   onPenModeToggle: () => void;
   canvas: HTMLCanvasElement | null;
+  allowedShapes: Array<String>;
   disableAlignItems?: boolean;
   disableGrouping?: boolean;
   disableHints?: boolean;
@@ -78,6 +79,7 @@ export const MobileMenu = ({
   onLockToggle,
   onPenModeToggle,
   canvas,
+  allowedShapes,
   disableAlignItems,
   disableGrouping,
   disableHints,
@@ -120,6 +122,7 @@ export const MobileMenu = ({
                       appState={appState}
                       canvas={canvas}
                       activeTool={appState.activeTool}
+                      allowedShapes={allowedShapes}
                       disableShortcuts={disableShortcuts}
                       setAppState={setAppState}
                       onImageAction={({ pointerType }) => {

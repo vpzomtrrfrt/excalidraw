@@ -370,10 +370,12 @@ export type SaveAsImageOptions = {
 };
 
 type CanvasActions = {
+  allowedShapes?: Array<String>;
   allowedShortcuts?: Array<String>;
   changeViewBackgroundColor?: boolean;
   clearCanvas?: boolean;
   disableAlignItems?: boolean;
+  disableFileDrop?: boolean;
   disableGrouping?: boolean;
   disableHints?: boolean;
   disableLink?: boolean;

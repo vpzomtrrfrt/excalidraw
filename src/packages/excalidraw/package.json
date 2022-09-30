@@ -1,6 +1,6 @@
 {
   "name": "@jitsi/excalidraw",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "main": "main.js",
   "types": "types/packages/excalidraw/index.d.ts",
   "files": [
