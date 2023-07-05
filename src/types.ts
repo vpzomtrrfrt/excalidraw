@@ -72,7 +72,7 @@ export type BinaryFiles = Record<ExcalidrawElement["id"], BinaryFileData>;
 
 export type LastActiveToolBeforeEraser =
   | {
-      type: typeof SHAPES[number]["value"] | "eraser";
+      type: typeof SHAPES[number]["value"] | "eraser" | "laser";
       customType: null;
     }
   | {
@@ -96,7 +96,7 @@ export type AppState = {
   editingLinearElement: LinearElementEditor | null;
   activeTool:
     | {
-        type: typeof SHAPES[number]["value"] | "eraser";
+        type: typeof SHAPES[number]["value"] | "eraser" | "laser";
         lastActiveToolBeforeEraser: LastActiveToolBeforeEraser;
         locked: boolean;
         customType: null;

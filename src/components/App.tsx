@@ -222,6 +222,8 @@ import {
 } from "../utils";
 import ContextMenu, { ContextMenuOption } from "./ContextMenu";
 import LayerUI from "./LayerUI";
+import { LaserToolOverlay } from "./LaserTool/LaserTool";
+import { LaserPathManager } from "./LaserTool/LaserPathManager";
 import { Toast } from "./Toast";
 import { actionToggleViewMode } from "../actions/actionToggleViewMode";
 import {
@@ -333,6 +335,8 @@ class App extends React.Component<AppProps, AppState> {
   lastPointerUp: React.PointerEvent<HTMLElement> | PointerEvent | null = null;
   contextMenuOpen: boolean = false;
   lastScenePointer: { x: number; y: number } | null = null;
+
+  laserPathManager: LaserPathManager = new LaserPathManager(this);
 
   constructor(props: AppProps) {
     super(props);
@@ -540,6 +544,7 @@ class App extends React.Component<AppProps, AppState> {
             />
             <div className="excalidraw-textEditorContainer" />
             <div className="excalidraw-contextMenuContainer" />
+            <LaserToolOverlay manager={this.laserPathManager} />
             {selectedElement.length === 1 &&
               this.state.showHyperlinkPopup &&
               !this.props.UIOptions.canvasActions.disableLink && (
@@ -3142,6 +3147,11 @@ class App extends React.Component<AppProps, AppState> {
       );
     } else if (this.state.activeTool.type === "custom") {
       setCursor(this.canvas, CURSOR_TYPE.AUTO);
+    } else if (this.state.activeTool.type === "laser") {
+      this.laserPathManager.startPath([
+        pointerDownState.lastCoords.x,
+        pointerDownState.lastCoords.y,
+      ]);
     } else if (this.state.activeTool.type !== "eraser") {
       this.createGenericElementOnPointerDown(
         this.state.activeTool.type,
@@ -4028,6 +4038,13 @@ class App extends React.Component<AppProps, AppState> {
         return;
       }
 
+      if (this.state.activeTool.type === "laser") {
+        this.laserPathManager.addPointToPath([
+          pointerCoords.x,
+          pointerCoords.y,
+        ]);
+      }
+
       const [gridX, gridY] = getGridPoint(
         pointerCoords.x,
         pointerCoords.y,
@@ -4769,6 +4786,11 @@ class App extends React.Component<AppProps, AppState> {
           : unbindLinearElements)(
           getSelectedElements(this.scene.getNonDeletedElements(), this.state),
         );
+      }
+
+      if (activeTool.type === "laser") {
+        this.laserPathManager.endPath();
+        return;
       }
 
       if (!activeTool.locked && activeTool.type !== "freedraw") {

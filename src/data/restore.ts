@@ -49,6 +49,7 @@ export const AllowedExcalidrawActiveTools: Record<
   freedraw: true,
   eraser: false,
   custom: true,
+  laser: false,
 };
 
 export type RestoredDataState = {
