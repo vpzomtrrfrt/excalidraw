@@ -351,6 +351,7 @@ export interface ExcalidrawAppProps {
   collabDetails?: { roomId: string; roomKey: string };
   excalidraw: ExcalidrawProps;
   getCollabAPI?: Function;
+  roomFileInterface?: RoomFileInterface;
 }
 
 export type SceneData = {
