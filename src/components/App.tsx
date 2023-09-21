@@ -1735,6 +1735,19 @@ class App extends React.Component<AppProps, AppState> {
 
       if (sceneData.collaborators) {
         this.setState({ collaborators: sceneData.collaborators });
+
+        for (const [id, info] of sceneData.collaborators) {
+          if (
+            typeof info.pointer !== "undefined" &&
+            info.button === "down" &&
+            info.usingLaserTool
+          ) {
+            this.laserPathManager.addPointToPath(id, [
+              info.pointer.x,
+              info.pointer.y,
+            ]);
+          }
+        }
       }
     },
   );
@@ -3148,7 +3161,7 @@ class App extends React.Component<AppProps, AppState> {
     } else if (this.state.activeTool.type === "custom") {
       setCursor(this.canvas, CURSOR_TYPE.AUTO);
     } else if (this.state.activeTool.type === "laser") {
-      this.laserPathManager.startPath([
+      this.laserPathManager.addPointToPath("", [
         pointerDownState.lastCoords.x,
         pointerDownState.lastCoords.y,
       ]);
@@ -4039,7 +4052,7 @@ class App extends React.Component<AppProps, AppState> {
       }
 
       if (this.state.activeTool.type === "laser") {
-        this.laserPathManager.addPointToPath([
+        this.laserPathManager.addPointToPath("", [
           pointerCoords.x,
           pointerCoords.y,
         ]);
@@ -4789,7 +4802,6 @@ class App extends React.Component<AppProps, AppState> {
       }
 
       if (activeTool.type === "laser") {
-        this.laserPathManager.endPath();
         return;
       }
 

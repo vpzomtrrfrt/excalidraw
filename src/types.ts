@@ -40,6 +40,7 @@ export type Collaborator = {
     y: number;
   };
   button?: "up" | "down";
+  usingLaserTool?: boolean;
   selectedElementIds?: AppState["selectedElementIds"];
   username?: string | null;
   userState?: UserIdleState;
