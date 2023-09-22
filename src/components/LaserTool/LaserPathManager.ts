@@ -1,5 +1,5 @@
 import { getStroke } from "perfect-freehand";
-import { getClientColor } from "../../clients";
+import { getClientColors } from "../../clients";
 
 import { sceneCoordsToViewportCoords } from "../../utils";
 import App from "../App";
@@ -114,7 +114,10 @@ export class LaserPathManager {
           "http://www.w3.org/2000/svg",
           "path",
         );
-        pathElem.setAttribute("fill", getClientColor(client));
+        pathElem.setAttribute(
+          "fill",
+          getClientColors(client, undefined).background,
+        );
         this.container.appendChild(pathElem);
         path.element = pathElem;
       }

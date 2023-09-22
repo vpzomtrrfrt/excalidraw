@@ -1,7 +1,10 @@
 import colors from "./colors";
 import { AppState } from "./types";
 
-export const getClientColors = (clientId: string, appState: AppState) => {
+export const getClientColors = (
+  clientId: string,
+  appState: AppState | undefined,
+) => {
   if (appState?.collaborators) {
     const currentUser = appState.collaborators.get(clientId);
     if (currentUser?.color) {
